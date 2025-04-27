@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: crepeo-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: crepeo-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:5000"       # порт хоста:контейнер
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: crepeo-client
+    restart: unless-stopped
+    # если клиенту нужны переменные из .env, добавить сюда env_file
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
