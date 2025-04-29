@@ -9,6 +9,11 @@
         <h1 class="register-page__title">Create your CREPEO account</h1>
         <form @submit.prevent="onSubmit">
           <InputField
+            id="username" label="Username"
+            placeholder="some-username"
+            v-model="form.username"
+          />
+          <InputField
             id="email" label="Email"
             type="email" placeholder="some-email@domain.com"
             v-model="form.email"
@@ -17,11 +22,6 @@
             id="password" label="Password"
             type="password" placeholder="•••••••••••"
             v-model="form.password"
-          />
-          <InputField
-            id="username" label="Username"
-            placeholder="some-username"
-            v-model="form.username"
           />
           <AuthButton variant="primary" type="submit">Sign Up</AuthButton>
         </form>
@@ -47,7 +47,7 @@ import AuthButton      from '@/shared/BaseButton.vue'
 
 const router = useRouter()
 const form = reactive({
-  email: '', password: '', username: '', avatarUrl: ''
+  username: '', email: '', password: ''
 })
 
 function onSubmit() {
