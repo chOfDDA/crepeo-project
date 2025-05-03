@@ -1,0 +1,127 @@
+@use 'sass:color';
+
+$primary-color: #B26B40;       // Основний (60%)
+$secondary-color: #D19C77;     // Вторинний (30%)
+$accent-color: #A05A2C;        // Акцент (10%)
+$light-gray: #E4E4E4;
+$bg-color: #F1D0B8;
+$white: #FFFFFF;
+
+// Layout and base styles
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+
+  .auth-left {
+    background-color: color.adjust($light-gray, $lightness: 10%);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+    }
+
+    .image-placeholder {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background-color: lighten($light-gray, 10%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .auth-right {
+    flex: 1;
+    background-color: $white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 4rem;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: $accent-color;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+      border: none;
+      background-color: $light-gray;
+    }
+
+    .primary-button {
+      background-color: $primary-color;
+      color: $white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 20px;
+      margin-top: 1rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .secondary-text {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: $secondary-color;
+    }
+
+    .secondary-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+
+      button {
+        background-color: $secondary-color;
+        color: $white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($secondary-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+
+    .auth-left {
+      display: none;
+    }
+
+    .auth-right {
+      padding: 2rem;
+    }
+  }
+}

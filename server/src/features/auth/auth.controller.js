@@ -1,19 +1,46 @@
-const { registerUser } = require('./auth.service');
+const { registerUser, loginUser } = require('./auth.service');
+const AppError = require('../../utils/AppError');
 
+// REGISTER
 async function register(req, res, next) {
   try {
     const { username, email, password } = req.body;
-
     if (!username || !email || !password) {
-      return res.status(400).json({ success: false, message: "Будь ласка, заповніть усі обов'язкові поля." });
+      throw new AppError('All fields are required', 400);
     }
 
     const user = await registerUser({ username, email, password });
 
-    res.status(201).json({ success: true, message: 'Користувач успішно зареєстрований', user: { id: user._id, username: user.username, email: user.email } });
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      user,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 }
 
-module.exports = { register };
+// LOGIN
+async function login(req, res, next) {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      throw new AppError('Email and password are required', 400);
+    }
+
+    const { token, user } = await loginUser({ email, password });
+
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login };
