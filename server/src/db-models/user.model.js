@@ -1,41 +1,36 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-// Схема користувача
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: [true, 'Username is required'],
-      trim: true,
-      minlength: 2,
-      maxlength: 50,
-    },
-    email: {
-      type: String,
-      required: [true, 'Email is required'],
-      unique: true,
-      lowercase: true,
-      trim: true,
-      match: [/.+\@.+\..+/, 'Будь ласка, введіть коректний email'],
-    },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      minlength: 6,
-    },
-    // Якщо в майбутньому будуть ролі (наприклад, "користувач", "адміністратор"):
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
-    },
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: [true, 'Username is required'],
+    unique: true,
+    trim: true,
   },
-  {
-    timestamps: true, // Створить createdAt і updatedAt автоматично
-  }
-);
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+    trim: true,
+    lowercase: true,
+    match: [/.+@.+\..+/, 'Please enter a valid email address'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    minlength: 6,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
+}, { timestamps: true });
 
-// Створення моделі користувача
-const User = mongoose.model('User', userSchema);
+// Метод для перевірки пароля
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

@@ -1,68 +1,71 @@
+<script setup>
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import BaseInput from '@/shared/BaseInput.vue';
+import BaseButton from '@/shared/BaseButton.vue';
+import { register } from '../authApi'
+
+const username = ref('')
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
+const router = useRouter()
+
+watch([username, email, password], () => {
+  errorMessage.value = ''
+})
+
+const handleRegister = () => {
+  if (!username.value || !email.value || !password.value) {
+    errorMessage.value = 'Please fill in all fields'
+    return
+  }
+
+  register({ username: username.value, email: email.value, password: password.value })
+    .then(() => router.push('/login'))
+}
+</script>
+
 <template>
-  <div class="register-page-wrapper">
-    <div class="register-page">
-      <aside class="register-page__aside">
-        <img src="../../../assets/logo-black.svg" alt="Logo" class="register-page__logo"/>
-      </aside>
+  <div class="auth-container">
+    <div class="auth-left">
+      <img class="image-placeholder" src="@/assets/auth-page-img.png" alt="img" />
+    </div>
 
-      <section class="register-page__form">
-        <h1 class="register-page__title">Create your CREPEO account</h1>
-        <form @submit.prevent="onSubmit">
-          <InputField
-            id="username" label="Username"
-            placeholder="some-username"
-            v-model="form.username"
-          />
-          <InputField
-            id="email" label="Email"
-            type="email" placeholder="some-email@domain.com"
-            v-model="form.email"
-          />
-          <InputField
-            id="password" label="Password"
-            type="password" placeholder="•••••••••••"
-            v-model="form.password"
-          />
-          <AuthButton variant="primary" type="submit">Sign Up</AuthButton>
-        </form>
+    <div class="auth-right">
+      <h1>Create your Crepeo account</h1>
+      <form @submit.prevent="handleRegister">
+        <label for="username">Username</label>
+        <BaseInput id="username" v-model="username" placeholder="e.g. john_doe" />
 
-        <p class="register-page__text">Forgot your password?</p>
-        <AuthButton variant="google" @click="onGoogleSignIn">
-          Sign in with Google
-        </AuthButton>
-        <AuthButton variant="secondary" @click="goToLogin">
-          Login
-        </AuthButton>
-      </section>
+        <label for="email">Email</label>
+        <BaseInput id="email" type="email" v-model="email" placeholder="example@mail.com" />
+
+        <label for="password">Password</label>
+        <BaseInput id="password" type="password" v-model="password" placeholder="********" />
+
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+        <BaseButton type="submit" class="primary-button">Sign Up</BaseButton>
+
+        <p class="secondary-text">Already have an account?</p>
+        <div class="secondary-buttons">
+          <router-link to="/login">
+            <button type="button">Log In</button>
+          </router-link>
+          <p class="secondary-text">or</p>
+          <router-link to="/google">
+            <BaseButton class="google-button">
+            <img src="" alt="Google icon" />
+            Sign up with Google
+          </BaseButton>
+          </router-link>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
-<script setup>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { register, googleSignIn } from '../authApi'
-import InputField      from '@/shared/BaseInput.vue'
-import AuthButton      from '@/shared/BaseButton.vue'
-
-const router = useRouter()
-const form = reactive({
-  username: '', email: '', password: ''
-})
-
-function onSubmit() {
-  register(form)
-    .then(() => router.push('/dashboard')) // Redirect to other page on successful registration
-    .catch(e => alert(e.response?.data?.error || 'Registration failed'))
-}
-
-function onGoogleSignIn() {
-  googleSignIn()
-}
-
-function goToLogin() {
-  router.push('/login')
-}
-</script>
-
-<style lang="scss" src="../auth.scss" scoped/>
+<style lang="scss" scoped>
+@use '../_auth.scss' as *;
+</style>
