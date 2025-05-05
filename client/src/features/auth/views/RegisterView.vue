@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import BaseInput from '@/shared/BaseInput.vue';
 import BaseButton from '@/shared/BaseButton.vue';
 import { register } from '../authApi'
+import GoogleIcon from '@/shared/icons/GoogleIcon.vue'
+
 
 const username = ref('')
 const email = ref('')
@@ -48,17 +50,14 @@ const handleRegister = () => {
 
         <BaseButton type="submit" class="primary-button">Sign Up</BaseButton>
 
-        <p class="secondary-text">Already have an account?</p>
-        <div class="secondary-buttons">
+        <p class="secondary-text">Already have an account? 
           <router-link to="/login">
-            <button type="button">Log In</button>
+            <span>Log In</span>
           </router-link>
-          <p class="secondary-text">or</p>
-          <router-link to="/google">
-            <BaseButton class="google-button">
-            <img src="" alt="Google icon" />
-            Sign up with Google
-          </BaseButton>
+        </p>
+        <div class="google-container">
+          <router-link to="/google" @click="onGoogleSignIn" class="google-button">
+            <GoogleIcon/>
           </router-link>
         </div>
       </form>

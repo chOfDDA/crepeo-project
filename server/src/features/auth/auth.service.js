@@ -5,9 +5,14 @@ const jwt = require('jsonwebtoken');
 
 // REGISTER
 async function registerUser({ username, email, password }) {
-  const existing = await User.findOne({ email });
-  if (existing) {
-    throw new AppError('User already exists', 409);
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
+    throw new AppError('Email already exists', 409);
+  }
+
+  const existingUsername = await User.findOne({ username });
+  if (existingUsername) {
+    throw new AppError('Username already exists', 409);
   }
 
   const hashed = await bcrypt.hash(password, 10);
@@ -20,17 +25,19 @@ async function registerUser({ username, email, password }) {
   };
 }
 
+
 // LOGIN
 async function loginUser({ email, password }) {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new AppError('User not found', 404);
+    throw new AppError('Invalid login or password', 401);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new AppError('Invalid credentials', 401);
+    throw new AppError('Invalid login or password', 401);
   }
+
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 

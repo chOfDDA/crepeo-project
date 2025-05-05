@@ -1,54 +1,81 @@
 <template>
-  <input
-    :id="id"
-    :type="type"
-    :placeholder="placeholder"
-    v-model="inputValue"
-    class="base-input"
-  />
+  <div class="base-input-wrapper" v-if="isPassword">
+    <input
+      :id="id"
+      :type="isVisible ? 'text' : 'password'"
+      :placeholder="placeholder"
+      v-model="inputValue"
+    />
+    <button type="button" class="eye-toggle" @click="toggleVisibility">
+      <component :is="isVisible ? EyeOff : Eye" size="20" />
+    </button>
+  </div>
+
+  <div class="base-input-wrapper" v-else>
+    <input
+      :id="id"
+      :type="type"
+      :placeholder="placeholder"
+      v-model="inputValue"
+    />
+  </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue'
+  import { defineProps, defineEmits, ref, watch, computed } from 'vue'
+  import { Eye, EyeOff } from 'lucide-vue-next'
 
-const props = defineProps({
-  id: String,
-  type: {
-    type: String,
-    default: 'text'
-  },
-  placeholder: String,
-  modelValue: String
-})
+  const props = defineProps({
+    id: String,
+    type: {
+      type: String,
+      default: 'text'
+    },
+    placeholder: String,
+    modelValue: String
+  })
 
-const emit = defineEmits(['update:modelValue'])
-const inputValue = ref(props.modelValue)
+  const emit = defineEmits(['update:modelValue'])
+  const inputValue = ref(props.modelValue)
+  const isVisible = ref(false)
+  const isPassword = computed(() => props.type === 'password')
 
-// Коли модель змінюється ззовні — оновлюємо локально
-watch(() => props.modelValue, (newVal) => {
-  inputValue.value = newVal
-})
+  const toggleVisibility = () => {
+    isVisible.value = !isVisible.value
+  }
 
-// Коли вводимо щось — емітимо наверх
-watch(inputValue, (newVal) => {
-  emit('update:modelValue', newVal)
-})
+  watch(() => props.modelValue, (newVal) => {
+    inputValue.value = newVal
+  })
+  watch(inputValue, (newVal) => {
+    emit('update:modelValue', newVal)
+  })
 </script>
 
 <style scoped>
-.base-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
+.base-input-wrapper {
   background-color: #e4e4e4;
-  border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  outline: none;
-  transition: box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+}
 
-  &:focus {
-    box-shadow: 0 0 0 2px #b26b40;
-  }
+.base-input-wrapper input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+.eye-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 0 0.5rem;
+  display: flex;
+  align-items: center;
 }
 </style>
