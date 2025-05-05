@@ -1,17 +1,8 @@
-# Stage 1: install dependencies
-FROM node:20-alpine AS deps
+FROM node:20-alpine
+
 WORKDIR /app
 
-# Копируем package.json и ставим зависимости
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 
-# Stage 2: copy code and запускаем
-FROM node:20-alpine AS runner
-WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-EXPOSE 5000
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]

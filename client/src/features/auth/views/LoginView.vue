@@ -14,16 +14,17 @@
 
         <BaseButton type="submit" class="primary-button">Log In</BaseButton>
 
-        <p class="secondary-text">or</p>
-        <BaseButton class="google-button" @click="onGoogleSignIn">
-          <img src="" alt="Google icon" />
-          Sign in with Google
-        </BaseButton>
-
-        <p class="auth-footer">
-          New user?
-          <router-link to="/register">Sign up</router-link>
+        <p class="secondary-text">New user? 
+          <router-link to="/register">
+            <span>Sign Up</span>
+          </router-link>
         </p>
+
+        <div class="google-container">
+          <router-link to="/google" @click="onGoogleSignIn" class="google-button">
+            <GoogleIcon/>
+          </router-link>
+        </div>
       </form>
     </div>
   </div>
@@ -35,6 +36,7 @@ import { useRouter } from 'vue-router';
 import BaseInput from '@/shared/BaseInput.vue';
 import BaseButton from '@/shared/BaseButton.vue';
 import { login } from '../authApi';
+import GoogleIcon from '@/shared/icons/GoogleIcon.vue'
 
 const router = useRouter();
 const email = ref('');

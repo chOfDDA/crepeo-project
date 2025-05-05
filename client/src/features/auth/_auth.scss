@@ -1,7 +1,7 @@
 @use 'sass:color';
 
 $primary-color: #B26B40;       // Основний (60%)
-$secondary-color: #D19C77;     // Вторинний (30%)
+$secondary-color: #8d5532;     // Вторинний (30%)
 $accent-color: #A05A2C;        // Акцент (10%)
 $light-gray: #E4E4E4;
 $bg-color: #F1D0B8;
@@ -32,7 +32,7 @@ $white: #FFFFFF;
       width: 240px;
       height: 240px;
       border-radius: 50%;
-      background-color: lighten($light-gray, 10%);
+      background-color: color.adjust($light-gray, $lightness: 10%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -51,6 +51,7 @@ $white: #FFFFFF;
       font-size: 2rem;
       margin-bottom: 2rem;
       color: $accent-color;
+      text-align: center;
     }
 
     label {
@@ -78,7 +79,7 @@ $white: #FFFFFF;
       cursor: pointer;
 
       &:hover {
-        background-color: darken($primary-color, 10%);
+        background-color: color.adjust($primary-color, $lightness: -10%);
       }
     }
 
@@ -104,9 +105,34 @@ $white: #FFFFFF;
         cursor: pointer;
 
         &:hover {
-          background-color: darken($secondary-color, 10%);
+          background-color: color.adjust($secondary-color, $lightness: -10%);
         }
       }
+      
+    }
+    .google-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    
+    .google-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      width: 100%;
+      margin-bottom: 0;
     }
   }
 }

@@ -1,16 +1,10 @@
-# 1) deps: ставим зависимости
-FROM node:20-alpine AS deps
+FROM node:20-alpine
+
 WORKDIR /app
 
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 
-# 2) dev: копируем модули + исходники
-FROM node:20-alpine AS dev
-WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
 EXPOSE 5173
+
 CMD ["npm", "run", "dev"]
