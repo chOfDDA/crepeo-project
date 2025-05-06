@@ -25,6 +25,8 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    command: npm run dev
+
 
   frontend:
     build:
@@ -39,6 +41,8 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
-
+    command: npm run dev
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 volumes:
   mongo-data:
