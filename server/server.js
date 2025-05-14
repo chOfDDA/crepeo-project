@@ -1,5 +1,5 @@
-const app = require('./src/app');
 const dotenv = require('dotenv');
+const app = require('./src/app');
 
 // Завантаження змінних середовища з .env
 dotenv.config();

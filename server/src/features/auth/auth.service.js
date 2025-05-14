@@ -1,7 +1,7 @@
 const User = require('../../db-models/user.model');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const AppError = require('../../utils/AppError');
-const jwt = require('jsonwebtoken');
 
 // REGISTER
 async function registerUser({ username, email, password }) {
@@ -15,11 +15,11 @@ async function registerUser({ username, email, password }) {
     throw new AppError('Username already exists', 409);
   }
 
-  const hashed = await bcrypt.hash(password, 10);
-  const user = await User.create({ username, email, password: hashed });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await User.create({ username, email, password: hashedPassword });
 
   return {
-    id: user._id,
+    id: user.id,
     username: user.username,
     email: user.email
   };
@@ -28,7 +28,7 @@ async function registerUser({ username, email, password }) {
 
 // LOGIN
 async function loginUser({ email, password }) {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select('+password');
   if (!user) {
     throw new AppError('Invalid login or password', 401);
   }
@@ -39,12 +39,12 @@ async function loginUser({ email, password }) {
   }
 
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
   return {
     token,
     user: {
-      id: user._id,
+      id: user.id,
       username: user.username,
       email: user.email
     }

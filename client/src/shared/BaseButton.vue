@@ -1,38 +1,48 @@
 <template>
-  <button :type="type" class="base-button">
-    <slot />
-  </button>
+    <button class="base-button" :disabled="disabled" @click="handleClick">
+        <slot></slot>
+    </button>
 </template>
-
+  
 <script setup>
-defineProps({
-  type: {
-    type: String,
-    default: 'button'
-  }
-})
+    const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false
+    }
+    });
+
+    const emit = defineEmits(['click']);
+
+    function handleClick(event) {
+        if (!props.disabled) emit('click', event);
+    }
 </script>
-
+  
 <style scoped>
-.base-button {
-  width: 100%;
-  padding: 0.75rem 1.25rem;
-  background-color: #b26b40;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #8e5434; /* трохи темніший */
+  .base-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    background-color: #b66a3c;
+    color: #fff;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  
+    &:hover:not(:disabled) {
+      background-color: #9a552f;
+    }
+  
+    &:disabled {
+      background-color: #d3d3d3;
+      cursor: not-allowed;
+    }
   }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #d19c77;
-  }
-}
 </style>
+  
