@@ -1,0 +1,76 @@
+@use '../../shared/variables' as *;
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .profile-info {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: $main-text-color;
+    }
+
+    .profession {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0.25rem 0;
+      color: $main-text-color;
+    }
+
+    .bio {
+      font-size: 0.95rem;
+      color: $secondary-text-color;
+    }
+  }
+}
+
+.edit-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  .edit-button {
+    padding: 0.5rem 1.25rem;
+  }
+}
+
+/* 🔁 Адаптив */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+    }
+
+    .profile-info {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .edit-button-wrapper {
+    .edit-button {
+      width: 100%;
+    }
+  }
+}

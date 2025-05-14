@@ -1,17 +1,10 @@
 @use 'sass:color';
-
-$primary-color: #B26B40;       // Основний (60%)
-$secondary-color: #8d5532;     // Вторинний (30%)
-$accent-color: #A05A2C;        // Акцент (10%)
-$light-gray: #E4E4E4;
-$bg-color: #F1D0B8;
-$white: #FFFFFF;
+@use '../../shared/_variables' as *;
 
 // Layout and base styles
 .auth-container {
   display: flex;
   min-height: 100vh;
-  font-family: 'Arial', sans-serif;
 
   .auth-left {
     background-color: color.adjust($light-gray, $lightness: 10%);
@@ -20,7 +13,6 @@ $white: #FFFFFF;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
 
     .logo {
       font-size: 1.5rem;

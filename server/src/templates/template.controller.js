@@ -21,7 +21,7 @@ const {
         success: true,
         message: 'User created successfully',
         user: {
-          id: user._id,
+          id: user.id,
           username: user.username,
           email: user.email,
         },

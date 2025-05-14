@@ -1,12 +1,13 @@
-import axios from 'axios';
-import { toast } from 'vue-sonner';
-import router from '@/router';
-import { handleUnauthorized } from '@/utils/authUtils'
+import axios from "axios";
+import { toast } from "vue-sonner";
+import { handleUnauthorized } from "@/utils/authUtils";
+import { useUserStore } from "@/stores/user";
 
 const api = axios.create();
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const userStore = useUserStore();
+  const token = userStore.token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -18,7 +19,7 @@ api.interceptors.response.use(
   (error) => {
     // Випадок: сервер не відповів (мережа, CORS, таймаут)
     if (!error.response) {
-      toast.error('Network error. Please check your internet connection.');
+      toast.error("Network error. Please check your internet connection.");
       return Promise.reject(error);
     }
 
@@ -26,42 +27,44 @@ api.interceptors.response.use(
 
     switch (status) {
       case 401:
-        if (error.config.url.includes('/auth/login')) {
-          toast.error('Wrong email or password.');
+        if (error.config.url.includes("/auth/login")) {
+          toast.error("Wrong email or password.");
         } else {
-          toast.error('Unauthorized. Please log in again.');
+          toast.error("Unauthorized. Please log in again.");
           handleUnauthorized();
         }
         break;
       case 403:
-        toast.error('Access denied.');
+        toast.error("Access denied.");
         break;
       case 404:
-        toast.error('Resource not found.');
+        toast.error("Resource not found.");
         break;
       case 409:
-        if (error.config.url.includes('/auth/register')) {
+        if (error.config.url.includes("/auth/register")) {
           const message = error.response.data.message?.toLowerCase();
 
-          if (message?.includes('email')) {
-            toast.error('User with this email alredy exists');
-          } else if (message?.includes('username')) {
-            toast.error('User with this username alredy exists');
+          if (message?.includes("email")) {
+            toast.error("User with this email alredy exists");
+          } else if (message?.includes("username")) {
+            toast.error("User with this username alredy exists");
           } else {
-            toast.error('User already exists');
+            toast.error("User already exists");
           }
         } else {
-          toast.error('Conflict error.');
+          toast.error("Conflict error.");
         }
         break;
       case 422:
-        toast.error(error.response.data.message || 'Validation error.');
+        toast.error(error.response.data.message || "Validation error.");
         break;
       case 500:
-        toast.error('Server error. Try again later.');
+        toast.error("Server error. Try again later.");
         break;
       default:
-        toast.error(error.response.data.message || 'An unexpected error occurred.');
+        toast.error(
+          error.response.data.message || "An unexpected error occurred."
+        );
         break;
     }
 
