@@ -6,14 +6,18 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import { useUserStore } from "@/stores/user";
 
-const app = createApp(App);
+const start = async () => {
+  const app = createApp(App);
 
-const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
-app.use(pinia);
+  const pinia = createPinia();
+  pinia.use(piniaPluginPersistedstate);
+  app.use(pinia);
 
-const userStore = useUserStore();
-await userStore.initialize();
+  const userStore = useUserStore();
+  await userStore.initialize();
 
-app.use(router);
-app.mount("#app");
+  app.use(router);
+  app.mount("#app");
+};
+
+start();

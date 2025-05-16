@@ -1,9 +1,13 @@
-import HomeView from './HomeView.vue';
+import HomeView from "./HomeView.vue";
 
 export default [
-    {
-        path: '/home',
-        name: 'home',
-        component: HomeView
+  {
+    path: "/home",
+    name: "home",
+    component: HomeView,
+    meta: {
+      title: "Homepage",
+      requiresAuth: true,
     },
-]
+  },
+];

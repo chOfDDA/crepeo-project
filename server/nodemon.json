@@ -1,7 +1,7 @@
 {
     "watch": ["."],
     "ignore": ["node_modules"],
-    "exec": "node server.js",
+    "exec": "node",
     "legacyWatch": true
   }
   

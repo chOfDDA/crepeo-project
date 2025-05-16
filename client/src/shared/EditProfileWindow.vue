@@ -8,7 +8,7 @@
 
             <div class="scrollable-content">
                 <div class="avatar-wrapper">
-                    <img :src="avatarUrl" alt="Avatar" class="avatar" />
+                    <img :src="avatarUrl || '../assets/default-avatar.svg'" alt="Avatar" class="avatar" />
                     <button type="button" class="upload-btn" @click="uploadAvatar">
                         Upload photo
                     </button>
@@ -88,11 +88,11 @@ const form = ref({
 const avatarUrl = computed(() => cloudinaryAvatar(form.value.photoUrl));
 
 watch(() => props.profile, (newProfile) => {
-    form.value = {
-        photoUrl: newProfile?.photoUrl || '',
-        profession: newProfile?.profession || '',
-        bio: newProfile?.bio || ''
-    };
+    if (newProfile) {
+        form.value.photoUrl = newProfile.photoUrl || '';
+        form.value.profession = newProfile.profession || '';
+        form.value.bio = newProfile.bio || '';
+    }
 });
 
 async function uploadAvatar() {

@@ -33,7 +33,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { toast } from 'vue-sonner';
 import { useUserStore } from '@/stores/user';
 import { login } from '../authApi';
 import AuthInput from '@/shared/AuthInput.vue';
@@ -47,8 +46,12 @@ const password = ref('');
 
 const onSubmit = async () => {
   try {
-    await login({ email: email.value, password: password.value }, userStore);
-    router.push({ name: 'profile', params: { id: userStore.user.id } });
+    const { token, user } = await login({ email: email.value, password: password.value });
+
+    userStore.setToken(token);
+    userStore.setUser(user);
+
+    router.push({ name: 'profile', params: { id: user.id } });
   } catch (err) {
     const msg = err.response?.data?.message || 'Login failed. Please try again.';
     toast.error(msg);

@@ -27,7 +27,7 @@ router.post('/', auth, async (req, res) => {
     if (profile) {
       profile.bio = bio;
       profile.profession = profession;
-      profile.photoUrl = photoUrl;
+      profile.avatar = photoUrl;
       await profile.save();
     } else {
       profile = new Profile({

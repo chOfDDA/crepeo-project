@@ -1,66 +1,64 @@
 @use '../../shared/variables' as *;
 
 .homepage {
-    display: flex;
-    background-color: $bg-color;
-    min-height: 100vh;
-  
-    .sidebar {
-      flex-shrink: 0;
+  display: flex;
+  min-height: 100vh;
+
+  .sidebar {
+    flex-shrink: 0;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+
+    .new-post {
+      background: $white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
     }
-  
-    .main-content {
-      flex: 1;
-      padding: 2rem;
-      max-width: 800px;
-      margin: 0 auto;
-  
-      .new-post {
-        background: $white;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
-      }
-  
-      .post {
-        background: $white;
-        border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  
-        .post-header {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-bottom: 0.5rem;
-  
-          .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-          }
-  
-          .username {
-            font-weight: bold;
-            color: $primary-color;
-          }
-        }
-  
-        .post-content {
-          margin: 1rem 0;
-          color: $secondary-color;
-        }
-  
-        .post-image {
-          width: 100%;
-          max-height: 400px;
+
+    .post {
+      background: $white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+      .post-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+
+        .avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
           object-fit: cover;
-          border-radius: 8px;
         }
+
+        .username {
+          font-weight: bold;
+          color: $primary-color;
+        }
+      }
+
+      .post-content {
+        margin: 1rem 0;
+        color: $secondary-color;
+      }
+
+      .post-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
       }
     }
   }
-  
+}
