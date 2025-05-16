@@ -5,36 +5,33 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     token: localStorage.getItem("token") || null,
     user: null,
-    avatarUrl: null,
   }),
-
   persist: true,
+
+  getters: {
+    avatarUrl: (state) =>
+      state.user?.photoUrl || "/src/assets/default-avatar.svg",
+  },
 
   actions: {
     setToken(token) {
       this.token = token;
       localStorage.setItem("token", token);
     },
+
     clearToken() {
       this.token = null;
       this.user = null;
-      this.avatarUrl = null;
       localStorage.removeItem("token");
     },
+
     setUser(user) {
       this.user = user;
-      this.avatarUrl = user?.photoUrl || "/images/default-avatar.png";
     },
-    updateAvatar(newUrl) {
-      this.avatarUrl = newUrl;
-      if (this.user) {
-        this.user.photoUrl = newUrl;
-      }
-    },
+
     logout() {
       this.token = null;
       this.user = null;
-      this.avatarUrl = null;
       localStorage.removeItem("token");
     },
 

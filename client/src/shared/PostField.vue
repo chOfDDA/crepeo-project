@@ -1,14 +1,13 @@
 <template>
   <div class="post-field">
-    <img :src="avatarUrl" alt="Avatar" class="avatar" />
+    <img :src="userStore.avatarUrl" alt="Avatar" class="avatar" />
     <div class="field-content">
       <textarea v-model="postText" placeholder="What's new?" rows="3" class="field-textarea" readonly
         @click="openPostWindow"></textarea>
     </div>
     <BaseButton @click="openPostWindow">Publish</BaseButton>
 
-    <PostWindow v-if="isPostWindowOpen" :key="'post-window'" :avatar-url="avatarUrl" @submit="handleSubmit"
-      @close="closePostWindow" />
+    <PostWindow v-if="isPostWindowOpen" @submit="handleSubmit" @close="closePostWindow" />
   </div>
 </template>
 
@@ -33,6 +32,7 @@ function openPostWindow() {
 }
 
 function closePostWindow() {
+  console.log('closing modal');
   isPostWindowOpen.value = false;
 }
 

@@ -1,38 +1,36 @@
 <template>
-  <PageCard title="Home">
-    <PostField />
-    <PostList :posts="posts" :user="user" :profile="profile" />
+  <PageCard title="Home" class="homepage">
+    <PostField @submit="addPost" />
+    <PostCard v-for="post in posts" :key="post._id" :post="post" />
   </PageCard>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import { toast } from 'vue-sonner';
 
 import PageCard from '@/shared/PageCard.vue';
 import PostField from '@/shared/PostField.vue';
-import PostList from '@/features/posts/PostList.vue';
-
-import { getProfile, getPosts } from '@/features/profile/profileApi.js';
-import { getUser } from '@/features/user/userApi.js';
+import PostCard from '@/shared/PostCard.vue';
+import { getHomepageData } from './homeApi';
 
 const posts = ref([]);
-const user = ref({});
-const profile = ref({});
 
-onMounted(async () => {
+async function fetchPosts() {
   try {
-    const [{ data: u }, { data: p }, { data: ps }] = await Promise.all([
-      getUser(),
-      getProfile(),
-      getPosts()
-    ]);
-    user.value = u.user;
-    profile.value = p.profile;
-    posts.value = ps.posts;
+    const { posts: ps } = await getHomepageData();
+    posts.value = ps;
   } catch (err) {
-    console.error('Error initializing home view:', err);
+    console.error('Homepage error:', err);
+    toast.error('Failed to load homepage');
   }
-});
+}
+
+function addPost(newPost) {
+  posts.value = [newPost, ...posts.value];
+}
+
+onMounted(fetchPosts);
 </script>
 
 <style lang="scss" scoped>

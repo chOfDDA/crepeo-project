@@ -16,8 +16,7 @@
     </div>
 
     <PostField v-if="isOwnProfile" />
-
-    <PostList :posts="posts" :user="userStore.user" :profile="profile" />
+    <UserPostView v-for="post in userPosts" :key="post.id" :post="post" />
 
     <EditProfileWindow v-if="editMode" :key="'edit-profile'" :profile="profile" @saved="onProfileSaved"
       @cancel="() => (editMode = false)" />
@@ -30,23 +29,23 @@ import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import {
   getProfile,
-  getProfileByUserId,
-  getPosts
+  getProfileByUserId
 } from '@/features/profile/profileApi.js';
+import { getPostsByUserId } from '@/features/posts/postApi';
 
 import PageCard from '@/shared/PageCard.vue';
 import EditProfileWindow from '@/shared/EditProfileWindow.vue';
-import PostList from '@/features/posts/PostList.vue';
 import BaseButton from '@/shared/BaseButton.vue';
 import PostField from '@/shared/PostField.vue';
+import UserPostView from '@/shared/UserPostView.vue';
 
 export default {
   components: {
     PageCard,
     EditProfileWindow,
-    PostList,
     BaseButton,
-    PostField
+    PostField,
+    UserPostView
   },
   setup() {
     const route = useRoute();
@@ -72,12 +71,15 @@ export default {
           : await getProfile();
         profile.value = pResp.data.profile || {};
 
-        const postsResp = await getPosts();
+        const postsResp = await getPostsByUserId(userId.value);
         posts.value = postsResp.data.posts;
       } catch (err) {
         console.error('Помилка при завантаженні даних профілю:', err);
       }
     };
+    const userPosts = computed(() =>
+      posts.value.filter(p => p.user?.id === userStore.user?.id)
+    );
 
     watch(() => route.params.id, fetchProfile);
 
@@ -100,7 +102,8 @@ export default {
       editMode,
       isOwnProfile,
       onProfileSaved,
-      userStore
+      userStore,
+      userPosts
     };
   }
 };

@@ -8,7 +8,7 @@
 
             <div class="scrollable-content">
                 <div class="content">
-                    <img :src="avatarUrl" alt="Avatar" class="avatar" />
+                    <img :src="userStore.avatarUrl" alt="Avatar" class="avatar" />
                     <textarea v-model="postText" placeholder="What's new?" rows="4" />
                 </div>
 
@@ -29,10 +29,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { toast } from 'vue-sonner';
 import BaseButton from '@/shared/BaseButton.vue';
 import { openUploadWidget } from '@/services/cloudinary.js';
 import AttachImgIcon from './icons/AttachImgIcon.vue';
 import { useUserStore } from '@/stores/user';
+import { createPost } from '@/features/posts/postApi';
 
 const postText = ref('');
 const imageUrl = ref('');
@@ -59,11 +61,22 @@ async function attachImage() {
     }
 }
 
-function submitPost() {
-    emit('submit', { text: postText.value, image: imageUrl.value });
-    postText.value = '';
-    imageUrl.value = '';
-    emit('close');
+async function submitPost() {
+    try {
+        const { data } = await createPost({
+            content: postText.value,
+            imageUrl: imageUrl.value
+        });
+        toast.success('Post published');
+        emit('submit', data.post);
+    } catch (err) {
+        console.error('Post creation failed:', err);
+        toast.error('Failed to publish post');
+    } finally {
+        postText.value = '';
+        imageUrl.value = '';
+        closeWindow();
+    }
 }
 </script>
 

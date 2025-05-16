@@ -37,6 +37,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router'
 import AuthInput from '@/shared/AuthInput.vue';
 import AuthButton from '@/shared/AuthButton.vue';
@@ -54,15 +55,26 @@ watch([username, email, password], () => {
   errorMessage.value = ''
 })
 
-const handleRegister = () => {
+const handleRegister = async () => {
   if (!username.value || !email.value || !password.value) {
-    errorMessage.value = 'Please fill in all fields'
-    return
+    errorMessage.value = 'Please fill in all fields';
+    return;
   }
 
-  register({ username: username.value, email: email.value, password: password.value })
-    .then(() => router.push('/login'))
-}
+  try {
+    await register({
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    });
+    toast.success('Registration successful! Redirecting...');
+    router.push('/login');
+  } catch (err) {
+    const msg = err.response?.data?.message || 'Registration failed';
+    toast.error(msg);
+    errorMessage.value = msg;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
