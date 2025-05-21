@@ -37,7 +37,7 @@ import { toast } from 'vue-sonner';
 import { useUserStore } from '@/stores/user';
 import { login } from '../authApi';
 import AuthInput from '@/shared/AuthInput.vue';
-import AuthButton from '@/shared/AuthButton.vue';
+import AuthButton from '@/shared/buttons/AuthButton.vue';
 import GoogleIcon from '@/shared/icons/GoogleIcon.vue';
 
 const router = useRouter();

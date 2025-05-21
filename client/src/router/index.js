@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
-import { getToken } from "@/utils/authUtils";
 
 import authRoutes from "@/features/auth/authRoutes";
 import profileRoutes from "@/features/profile/profileRoutes";
@@ -35,6 +34,8 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !store.token) {
     return next({ path: "/login" });
   }
+
+  
 
   next();
 });

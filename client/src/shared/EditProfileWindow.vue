@@ -88,7 +88,7 @@ const userStore = useUserStore();
 
 const avatarUrl = computed(() => form.value.photoUrl || '');
 
-import BaseButton from '@/shared/BaseButton.vue';
+import BaseButton from '@/shared/buttons/BaseButton.vue';
 import { openUploadWidget } from '@/services/cloudinary.js';
 import { getAvatar } from '@/utils/avatarHelper';
 import { updateProfile } from '@/features/profile/profileApi.js';

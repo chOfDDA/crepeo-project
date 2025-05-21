@@ -30,7 +30,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
-import BaseButton from '@/shared/BaseButton.vue';
+import BaseButton from '@/shared/buttons/BaseButton.vue';
 import { openUploadWidget } from '@/services/cloudinary.js';
 import AttachImgIcon from './icons/AttachImgIcon.vue';
 import { createPost } from '@/features/posts/postApi';
