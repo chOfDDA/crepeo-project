@@ -1,7 +1,11 @@
 <template>
   <PageCard title="Home" class="homepage">
-    <PostField @submit="addPost" />
-    <PostCard v-for="post in posts" :key="post._id" :post="post" />
+    <div class="post-field-wrapper">
+      <PostField @submit="addPost" />
+    </div>
+    <div class="post-list">
+      <PostCard v-for="post in posts" :key="post._id" :post="post" />
+    </div>
   </PageCard>
 </template>
 

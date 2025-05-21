@@ -38,6 +38,13 @@ api.interceptors.response.use(
         toast.error("Access denied.");
         break;
       case 404:
+        if (
+          error.config.url.includes("/api/profile") ||
+          error.config.url.includes("/api/users")
+        ) {
+          break;
+        }
+
         toast.error("Resource not found.");
         break;
       case 409:

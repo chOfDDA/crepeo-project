@@ -1,4 +1,3 @@
-// src/features/posts/postApi.js
 import api from "@/interceptors/axios";
 
 export function getPostsByUserId(userId) {
@@ -11,4 +10,8 @@ export function createPost(data) {
 
 export function getAllPosts() {
   return api.get("/api/posts");
+}
+
+export function deletePost(postId) {
+  return api.delete(`/api/posts/${postId}`);
 }

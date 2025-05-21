@@ -2,7 +2,7 @@
   <aside class="sidebar">
     <div class="sidebar-top">
       <RouterLink to="/home" class="logo-link">
-        <img src="../assets/logo-white-v4.svg" alt="Logo" class="logo" />
+        <img src="/assets/logo-white-v4.svg" alt="Logo" class="logo" />
       </RouterLink>
     </div>
 
@@ -33,10 +33,10 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
-import HomeIcon from '@/shared/icons/HomeIcon.vue';
-import SearchIcon from '@/shared/icons/SearchIcon.vue';
-import ProfileIcon from '@/shared/icons/ProfileIcon.vue';
-import MoreIcon from '@/shared/icons/MoreIcon.vue';
+import HomeIcon from '@/shared/icons/menu-icons/HomeIcon.vue';
+import SearchIcon from '@/shared/icons/menu-icons/SearchIcon.vue';
+import ProfileIcon from '@/shared/icons/menu-icons/ProfileIcon.vue';
+import MoreIcon from '@/shared/icons/menu-icons/MoreIcon.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -70,7 +70,6 @@ function logout() {
   z-index: 1000;
 }
 
-/* Верхній логотип */
 .sidebar-top .logo-link {
   display: flex;
   justify-content: center;
@@ -85,7 +84,6 @@ function logout() {
   box-shadow: 0px 0px 20px 2px #b66a3c;
 }
 
-/* Центральні іконки */
 .nav-icons {
   display: flex;
   flex-direction: column;
@@ -93,7 +91,6 @@ function logout() {
   align-items: center;
 }
 
-/* Стилі для лінків */
 .icon-link {
   color: #999;
   transition: 0.2s ease;
@@ -103,7 +100,6 @@ function logout() {
   color: #000;
 }
 
-/* Нижнє меню */
 .more-wrapper {
   position: relative;
   cursor: pointer;
@@ -114,7 +110,6 @@ function logout() {
   color: #000;
 }
 
-/* Випадаюче меню */
 .dropdown {
   position: absolute;
   bottom: 64px;

@@ -1,37 +1,41 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: [true, 'Username is required'],
-    unique: true,
-    trim: true,
+const userSchema = new mongoose.Schema(
+  {
+    photoUrl: { type: String, default: "" },
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [/.+@.+\..+/, "Please enter a valid email address"],
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      minlength: 6,
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    trim: true,
-    lowercase: true,
-    match: [/.+@.+\..+/, 'Please enter a valid email address'],
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: 6,
-    select: false, // Do not return password in queries
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 // Метод для перевірки пароля
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

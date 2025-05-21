@@ -1,65 +1,74 @@
 <template>
-    <div class="edit-profile-backdrop" @click.self="$emit('cancel')">
+    <div class="edit-profile-backdrop" @click.self="handleCancel">
         <div class="edit-profile-window">
             <div class="header">
-                <button class="cancel-btn" @click="$emit('cancel')">Cancel</button>
-                <span class="title">Edit Profile</span>
+                <button class="cancel-btn" @click="handleCancel">
+                    Cancel
+                </button>
+                <span class=" title">Edit Profile</span>
             </div>
 
             <div class="scrollable-content">
                 <div class="avatar-wrapper">
-                    <img :src="avatarUrl || '../assets/default-avatar.svg'" alt="Avatar" class="avatar" />
-                    <button type="button" class="upload-btn" @click="uploadAvatar">
-                        Upload photo
+                    <img :src="getAvatar(avatarUrl)" alt="Avatar" class="avatar" />
+                    <div class="avatar-buttons">
+                        <button type="button" class="upload-btn" @click="uploadAvatar">
+                            Upload photo
+                        </button>
+                        <button v-if="form.photoUrl" class="clear-btn" @click="form.photoUrl = ''">
+                            Remove photo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role" v-model="form.role">
+                        <option value="">None</option>
+                        <option>Professional</option>
+                        <option>Amateur</option>
+                        <option>Observer</option>
+                        <option>Client</option>
+                    </select>
+                </div>
+
+                <div class="form-group" v-if="form.role === 'Professional' || form.role === 'Amateur'">
+                    <label for="professions">Professions:</label>
+                    <div class="multi-select">
+                        <div class="multi-option" v-for="profession in allProfessions" :key="profession"
+                            :class="{ selected: form.professions.includes(profession) }"
+                            @click="toggleProfession(profession)">
+                            {{ profession }}
+                        </div>
+                    </div>
+                    <button v-if="form.professions.length" class="clear-btn" @click="form.professions = []">
+                        Clear selections
                     </button>
                 </div>
 
                 <div class="form-group">
-                    <label for="profession">Profession:</label>
-                    <select id="profession" v-model="form.profession" required>
-                        <option disabled value="">Select your profession</option>
-                        <option>Photographer</option>
-                        <option>Writer</option>
-                        <option>Artist</option>
-                        <option>Designer</option>
-                        <option>Illustrator</option>
-                        <option>Composer</option>
-                        <option>Filmmaker</option>
-                        <option>3D Artist</option>
-                        <option>Game Developer</option>
-                        <option>UI/UX Designer</option>
-                        <option>Fashion Designer</option>
-                        <option>Musician</option>
-                        <option>Sound Designer</option>
-                        <option>Poet</option>
-                        <option>Animator</option>
-                        <option>Voice Actor</option>
-                        <option>Tattoo Artist</option>
-                        <option>Craftsman</option>
-                        <option>Calligrapher</option>
-                        <option>Ceramic Artist</option>
-                        <option>Set Designer</option>
-                        <option>Architect</option>
-                        <option>Creative Director</option>
-                        <option>Sculptor</option>
-                        <option>Tailor</option>
-                        <option>Saxophonist</option>
-                        <option>Embroidery Artist</option>
-                        <option>Makeup Artist</option>
-                        <option>Dancer</option>
+                    <label for="offerType">I am:</label>
+                    <select id="offerType" v-model="form.offerType">
+                        <option value="">None</option>
+                        <option>I am looking for a specialist</option>
+                        <option>I am offering creative services</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="bio">About:</label>
-                    <textarea id="bio" v-model="form.bio" rows="4" required placeholder="Tell us about yourself..."
+                    <textarea id="bio" v-model="form.bio" rows="4" placeholder="Tell us about yourself..."
                         class="no-resize"></textarea>
                 </div>
             </div>
 
             <div class="actions">
                 <div class="center-btn">
-                    <BaseButton @click="save">Save</BaseButton>
+                    <BaseButton
+                        :disabled="!form.role || ((form.role === 'Professional' || form.role === 'Amateur') && !form.professions.length)"
+                        @click="save">
+                        Save
+                    </BaseButton>
                 </div>
             </div>
         </div>
@@ -68,29 +77,103 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { toast } from 'vue-sonner';
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore();
+
+const avatarUrl = computed(() => form.value.photoUrl || '');
+
 import BaseButton from '@/shared/BaseButton.vue';
 import { openUploadWidget } from '@/services/cloudinary.js';
-import { cloudinaryAvatar } from '@/utils/imageHelpers.js';
+import { getAvatar } from '@/utils/avatarHelper';
 import { updateProfile } from '@/features/profile/profileApi.js';
+
+const isSaved = ref(false);
 
 const props = defineProps({
     profile: Object
 });
 
-const emit = defineEmits(['saved', 'cancel']);
+const allProfessions = [
+    "Photographer", "Writer", "Artist", "Designer", "Illustrator",
+    "Composer", "Filmmaker", "3D Artist", "Game Developer", "UI/UX Designer",
+    "Fashion Designer", "Musician", "Sound Designer", "Poet", "Animator",
+    "Voice Actor", "Tattoo Artist", "Craftsman", "Calligrapher", "Ceramic Artist",
+    "Set Designer", "Architect", "Creative Director", "Sculptor", "Tailor",
+    "Saxophonist", "Embroidery Artist", "Makeup Artist", "Dancer"
+];
 
 const form = ref({
     photoUrl: props.profile?.photoUrl || '',
-    profession: props.profile?.profession || '',
+    role: props.profile?.role || '',
+    professions: props.profile?.professions || [],
+    offerType: props.profile?.offerType || '',
     bio: props.profile?.bio || ''
 });
 
-const avatarUrl = computed(() => cloudinaryAvatar(form.value.photoUrl));
+function toggleProfession(profession) {
+    const index = form.value.professions.indexOf(profession);
+    if (index === -1) {
+        form.value.professions.push(profession);
+    } else {
+        form.value.professions.splice(index, 1);
+    }
+}
+
+async function save() {
+    if (!form.value.role ||
+        ((form.value.role === 'Professional' || form.value.role === 'Amateur') && !form.value.professions.length)) {
+        toast.warning("Please complete your profile before continuing.");
+        return;
+    }
+
+    try {
+        const { data } = await updateProfile({
+            photoUrl: form.value.photoUrl,
+            role: form.value.role,
+            professions: form.value.professions,
+            offerType: form.value.offerType,
+            bio: form.value.bio
+        });
+        emit('saved', data.profile);
+        userStore.setUser({
+            ...userStore.user,
+            ...data.profile
+        });
+        isSaved.value = true;
+    } catch (err) {
+        console.error('Profile save failed:', err);
+    }
+}
+
+const emit = defineEmits(['saved', 'cancel']);
+
+function handleCancel() {
+    if (!isSaved.value) {
+        toast.warning('Discard changes?', {
+            description: 'Changes you made will not be saved.',
+            action: {
+                label: 'Discard',
+                onClick: () => emit('cancel')
+            },
+            cancel: {
+                label: 'Keep Editing'
+            },
+            duration: 5000
+        });
+        return;
+    }
+
+    emit('cancel');
+}
+
 
 watch(() => props.profile, (newProfile) => {
     if (newProfile) {
         form.value.photoUrl = newProfile.photoUrl || '';
-        form.value.profession = newProfile.profession || '';
+        form.value.role = newProfile.role || '';
+        form.value.professions = newProfile.professions || [];
+        form.value.offerType = newProfile.offerType || '';
         form.value.bio = newProfile.bio || '';
     }
 });
@@ -106,19 +189,6 @@ async function uploadAvatar() {
         widget.open();
     } catch (err) {
         console.error('Cloudinary error:', err);
-    }
-}
-
-async function save() {
-    try {
-        const { data } = await updateProfile({
-            photoUrl: form.value.photoUrl,
-            profession: form.value.profession,
-            bio: form.value.bio
-        });
-        emit('saved', data.profile);
-    } catch (err) {
-        console.error('Profile save failed:', err);
     }
 }
 </script>
@@ -191,15 +261,21 @@ async function save() {
     gap: 0.5rem;
 }
 
+.avatar-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .avatar {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid $accent-color;
 }
 
-.upload-btn {
+.upload-btn,
+.clear-btn {
     background: none;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -229,6 +305,29 @@ select {
     border: 1px solid #ddd;
     font-size: 1rem;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.multi-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.multi-option {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.9rem;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s;
+}
+
+.multi-option.selected {
+    background-color: $accent-color;
+    color: white;
+    border-color: $accent-color;
 }
 
 .actions {
