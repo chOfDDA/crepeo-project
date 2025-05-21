@@ -3,7 +3,7 @@
     <div class="profile-header">
       <img :src="getAvatar(profile.photoUrl)" alt="Avatar" class="avatar" />
       <div class="profile-info">
-        <h2 v-if="profile">@{{ profile.username }}</h2>
+        <h2 class="username" v-if="profile">@{{ profile.username }}</h2>
 
         <div class="info-block" v-if="profile.role">
           <span class="label"></span>

@@ -5,7 +5,7 @@
                 <button class="cancel-btn" @click="handleCancel">
                     Cancel
                 </button>
-                <span class=" title">Edit Profile</span>
+                <span class="title">Edit Profile</span>
             </div>
 
             <div class="scrollable-content">
@@ -46,8 +46,8 @@
                     </button>
                 </div>
 
-                <div class="form-group">
-                    <label for="offerType">I am:</label>
+                <div class="form-group" v-if="form.role === 'Professional' || form.role === 'Amateur'">
+                    <label for="offerType">I am </label>
                     <select id="offerType" v-model="form.offerType">
                         <option value="">None</option>
                         <option>I am looking for a specialist</option>
@@ -55,7 +55,12 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="form.role === 'Client'">
+                    <label>I am</label>
+                    <input type="text" value="I am looking for specialist" class="disabled-input" disabled />
+                </div>
+
+                <div class="form-group" v-if="form.role !== ''">
                     <label for="bio">About:</label>
                     <textarea id="bio" v-model="form.bio" rows="4" placeholder="Tell us about yourself..."
                         class="no-resize"></textarea>
@@ -100,15 +105,24 @@ const allProfessions = [
     "Fashion Designer", "Musician", "Sound Designer", "Poet", "Animator",
     "Voice Actor", "Tattoo Artist", "Craftsman", "Calligrapher", "Ceramic Artist",
     "Set Designer", "Architect", "Creative Director", "Sculptor", "Tailor",
-    "Saxophonist", "Embroidery Artist", "Makeup Artist", "Dancer"
+    "Saxophonist", "Embroidery Artist", "Makeup Artist", "Dancer", "Knitting",
 ];
 
 const form = ref({
     photoUrl: props.profile?.photoUrl || '',
     role: props.profile?.role || '',
     professions: props.profile?.professions || [],
-    offerType: props.profile?.offerType || '',
+    offerType: props.profile?.role === 'Client' ? 'I am looking for specialist' : props.profile?.offerType || '',
     bio: props.profile?.bio || ''
+});
+
+watch(() => form.value.role, (newRole) => {
+    if (newRole === 'Client') {
+        form.value.offerType = 'I am looking for specialist';
+    } else if (newRole === 'Observer') {
+        form.value.offerType = '';
+        form.value.professions = [];
+    }
 });
 
 function toggleProfession(profession) {
@@ -121,20 +135,21 @@ function toggleProfession(profession) {
 }
 
 async function save() {
-    if (!form.value.role ||
-        ((form.value.role === 'Professional' || form.value.role === 'Amateur') && !form.value.professions.length)) {
+    if (!form.value.role || ((form.value.role === 'Professional' || form.value.role === 'Amateur') && !form.value.professions.length)) {
         toast.warning("Please complete your profile before continuing.");
         return;
     }
 
+    const payload = {
+        photoUrl: form.value.photoUrl,
+        role: form.value.role,
+        professions: form.value.professions,
+        offerType: form.value.offerType,
+        bio: form.value.bio
+    };
+
     try {
-        const { data } = await updateProfile({
-            photoUrl: form.value.photoUrl,
-            role: form.value.role,
-            professions: form.value.professions,
-            offerType: form.value.offerType,
-            bio: form.value.bio
-        });
+        const { data } = await updateProfile(payload);
         emit('saved', data.profile);
         userStore.setUser({
             ...userStore.user,
@@ -167,13 +182,12 @@ function handleCancel() {
     emit('cancel');
 }
 
-
 watch(() => props.profile, (newProfile) => {
     if (newProfile) {
         form.value.photoUrl = newProfile.photoUrl || '';
         form.value.role = newProfile.role || '';
         form.value.professions = newProfile.professions || [];
-        form.value.offerType = newProfile.offerType || '';
+        form.value.offerType = newProfile.role === 'Client' ? 'I am looking for specialist' : newProfile.offerType || '';
         form.value.bio = newProfile.bio || '';
     }
 });
@@ -289,6 +303,15 @@ async function uploadAvatar() {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.disabled-input {
+    background-color: #f0f0f0;
+    color: #888;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
 }
 
 textarea.no-resize {
