@@ -16,15 +16,16 @@
   }
 
   .profile-info {
-    flex-basis: 50%;
+    flex-basis: 60%;
     margin-left: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    text-align: right;
     gap: 0.4rem;
 
     .username {
-      font-size: 1.8rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: $main-text-color;
     }
@@ -66,6 +67,7 @@
 
     .bio {
       font-size: 0.95rem;
+      font-style: italic;
       color: $secondary-text-color;
     }
   }

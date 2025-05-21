@@ -13,14 +13,24 @@ defineProps({
 <style scoped>
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
+    justify-items: center;
     margin-top: 0.5rem;
+    max-width: 100%;
 }
 
 .gallery-image {
     width: 100%;
-    border-radius: 4px;
-    object-fit: cover;
+    max-width: 400px;
+    max-height: 500px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .gallery-image {
+        max-height: 250px;
+    }
 }
 </style>
