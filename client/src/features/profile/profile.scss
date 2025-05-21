@@ -2,36 +2,66 @@
 
 .profile-header {
   display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 
   .avatar {
-    width: 88px;
-    height: 88px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     flex-shrink: 0;
+    object-fit: cover;
   }
 
   .profile-info {
-    flex: 1;
-    min-width: 0;
-    text-align: right;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    flex-basis: 50%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
 
-    h2 {
-      margin: 0;
-      font-size: 1.5rem;
+    .username {
+      font-size: 1.8rem;
+      font-weight: 700;
       color: $main-text-color;
     }
 
-    .profession {
+    .info-block {
       font-size: 1rem;
-      font-weight: 600;
-      margin: 0.25rem 0;
-      color: $main-text-color;
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+
+      .label {
+        font-weight: 600;
+        color: $main-text-color;
+      }
+
+      .value {
+        color: $secondary-text-color;
+      }
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      &.right-align {
+        justify-content: flex-end;
+        width: 100%;
+      }
+
+      .tag {
+        background-color: $bg-color;
+        color: $main-text-color;
+        font-size: 0.85rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+      }
     }
 
     .bio {
@@ -48,23 +78,40 @@
 
   .edit-button {
     padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    border-radius: 999px;
   }
 }
 
-/* 🔁 Адаптив */
+.profile-postfield-wrapper {
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: $secondary-text-color;
+  font-size: 1.1rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
 @media (max-width: 768px) {
   .profile-header {
     flex-direction: column;
+    align-items: center;
     text-align: center;
-
-    .avatar {
-      width: 72px;
-      height: 72px;
-    }
 
     .profile-info {
       width: 100%;
-      text-align: center;
+      align-items: center;
+      margin-left: 0;
+    }
+
+    .tags.right-align {
+      justify-content: center;
     }
   }
 

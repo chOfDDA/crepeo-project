@@ -16,7 +16,32 @@ const hideSidebar = computed(() => route.meta.hideSidebar);
     <main :class="['main-content', { 'no-sidebar': hideSidebar }]">
       <router-view />
     </main>
-    <Toaster position="top-right" richColors />
+    <Toaster position="top-center" richColors theme="light" :toast-options="{
+      style: {
+        background: '#ffffff',
+        color: '#d00000',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        padding: '8px',
+        borderRadius: '16px',
+        fontWeight: '600'
+      },
+      duration: 4000,
+      actionButtonStyle: {
+        backgroundColor: '#b66734',
+        color: '#fff',
+        fontWeight: 'bold',
+        padding: '0.4rem 0.9rem',
+        borderRadius: '8px'
+      },
+      cancelButtonStyle: {
+        backgroundColor: '#fff',
+        border: '1px solid #b66734',
+        color: '#b66734',
+        fontWeight: 'bold',
+        padding: '0.4rem 0.9rem',
+        borderRadius: '8px'
+      }
+    }" />
   </div>
 </template>
 

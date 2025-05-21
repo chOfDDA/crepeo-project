@@ -1,7 +1,7 @@
 <template>
   <div class="auth-container">
     <div class="auth-left">
-      <img class="image-placeholder" src="@/assets/auth-page-img.png" alt="img" />
+      <img class="image-placeholder" src="/assets/auth-page-img.png" alt="img" />
     </div>
 
     <div class="auth-right">

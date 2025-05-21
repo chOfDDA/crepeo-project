@@ -5,13 +5,10 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     token: localStorage.getItem("token") || null,
     user: null,
+    profile: null,
+    avatarUrl: "/assets/default-avatar.svg",
   }),
   persist: true,
-
-  getters: {
-    avatarUrl: (state) =>
-      state.user?.photoUrl || "/src/assets/default-avatar.svg",
-  },
 
   actions: {
     setToken(token) {
@@ -22,17 +19,28 @@ export const useUserStore = defineStore("user", {
     clearToken() {
       this.token = null;
       this.user = null;
+      this.avatarUrl = "/assets/default-avatar.svg";
       localStorage.removeItem("token");
     },
 
     setUser(user) {
       this.user = user;
+      this.avatarUrl = user?.photoUrl || "/assets/default-avatar.svg";
     },
 
     logout() {
-      this.token = null;
-      this.user = null;
-      localStorage.removeItem("token");
+      this.clearToken();
+    },
+
+    async fetchProfile() {
+      try {
+        const res = await api.get("/api/profile");
+        this.profile = res.data.profile;
+        this.avatarUrl =
+          res.data.profile?.photoUrl || "/assets/default-avatar.svg";
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+      }
     },
 
     async initialize() {

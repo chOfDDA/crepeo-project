@@ -1,6 +1,6 @@
 <template>
   <div class="post-field">
-    <img :src="userStore.avatarUrl" alt="Avatar" class="avatar" />
+    <img :src="getAvatar(avatarUrl)" alt="Avatar" class="avatar" />
     <div class="field-content">
       <textarea v-model="postText" placeholder="What's new?" rows="3" class="field-textarea" readonly
         @click="openPostWindow"></textarea>
@@ -12,9 +12,20 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useUserStore } from '@/stores/user';
-import { getProfile } from '@/features/profile/profileApi';
+import { ref, onMounted } from 'vue';
+
+import api from '@/interceptors/axios';
+const avatarUrl = ref('/assets/default-avatar.svg');
+import { getAvatar } from '@/utils/avatarHelper';
+
+onMounted(async () => {
+  try {
+    const { data } = await api.get('/api/profile');
+    avatarUrl.value = data?.profile?.photoUrl || '/assets/default-avatar.svg';
+  } catch (err) {
+    console.warn('Could not load avatar');
+  }
+});
 
 import BaseButton from '@/shared/BaseButton.vue';
 import PostWindow from '@/shared/PostWindow.vue';
@@ -24,15 +35,11 @@ const isPostWindowOpen = ref(false);
 
 const emit = defineEmits(['submit']);
 
-const userStore = useUserStore();
-const avatarUrl = computed(() => userStore.avatarUrl);
-
 function openPostWindow() {
   isPostWindowOpen.value = true;
 }
 
 function closePostWindow() {
-  console.log('closing modal');
   isPostWindowOpen.value = false;
 }
 

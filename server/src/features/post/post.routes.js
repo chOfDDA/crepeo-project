@@ -29,6 +29,17 @@ router.get("/user/:userId", async (req, res, next) => {
   }
 });
 
+router.get("/user/:id", async (req, res) => {
+  try {
+    const posts = await Post.find({ author: req.params.id }).sort({
+      createdAt: -1,
+    });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching user posts" });
+  }
+});
+
 // Створити новий пост
 router.post("/", auth, async (req, res, next) => {
   try {
@@ -43,6 +54,29 @@ router.post("/", auth, async (req, res, next) => {
       "username photoUrl"
     );
     res.status(201).json({ post: populatedPost });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Видалити пост
+router.delete("/:id", auth, async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Перевірка, чи користувач є автором поста
+    if (post.author.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this post" });
+    }
+
+    await post.deleteOne();
+    res.json({ message: "Post deleted successfully" });
   } catch (err) {
     next(err);
   }

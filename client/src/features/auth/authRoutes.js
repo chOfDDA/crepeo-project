@@ -21,5 +21,6 @@ export default [
     component: GoogleAuth,
     meta: { title: "Google Login", hideSidebar: true },
   },
+  
   // add /forgot-password
 ];

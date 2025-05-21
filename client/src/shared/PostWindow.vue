@@ -8,7 +8,7 @@
 
             <div class="scrollable-content">
                 <div class="content">
-                    <img :src="userStore.avatarUrl" alt="Avatar" class="avatar" />
+                    <img :src="getAvatar(avatarUrl)" alt="Avatar" class="avatar" />
                     <textarea v-model="postText" placeholder="What's new?" rows="4" />
                 </div>
 
@@ -28,19 +28,29 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 import BaseButton from '@/shared/BaseButton.vue';
 import { openUploadWidget } from '@/services/cloudinary.js';
 import AttachImgIcon from './icons/AttachImgIcon.vue';
-import { useUserStore } from '@/stores/user';
 import { createPost } from '@/features/posts/postApi';
+
+import api from '@/interceptors/axios';
+import { getAvatar } from '@/utils/avatarHelper';
 
 const postText = ref('');
 const imageUrl = ref('');
 const emit = defineEmits(['submit', 'close']);
-const userStore = useUserStore();
-const avatarUrl = computed(() => userStore.avatarUrl);
+const avatarUrl = ref('/assets/default-avatar.svg');
+
+onMounted(async () => {
+    try {
+        const { data } = await api.get('/api/profile');
+        avatarUrl.value = data?.profile?.photoUrl || '/assets/default-avatar.svg';
+    } catch (err) {
+        console.warn('Could not load profile photo');
+    }
+});
 
 function closeWindow() {
     emit('close');
