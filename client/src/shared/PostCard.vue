@@ -20,7 +20,7 @@
 
         <PostGallery v-if="post.imageUrl" :media="[post.imageUrl]" />
 
-        <div class="meta-actions">
+        <div v-if="!disableInteractions" class="meta-actions">
             <button class="icon-button">
                 <HeartIcon />
             </button>
@@ -52,6 +52,7 @@ import DeleteToast from '@/shared/DeleteToast.vue';
 
 const { post } = defineProps({
     post: Object,
+    disableInteractions: Boolean,
     showActions: {
         type: Boolean,
         default: false

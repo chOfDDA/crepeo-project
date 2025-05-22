@@ -1,5 +1,6 @@
 import { getProfile } from "@/features/profile/profileApi";
 import { getAllPosts } from "@/features/posts/postApi";
+import api from "@/interceptors/axios";
 import { useUserStore } from "@/stores/user";
 
 export async function getHomepageData() {
@@ -18,4 +19,16 @@ export async function getHomepageData() {
     profile: profileRes.data.profile,
     posts: postsRes.data.posts || [],
   };
+}
+
+export async function getGuestHomepageData() {
+  try {
+    const postsRes = await getAllPosts();
+    return {
+      posts: postsRes.data.posts || [],
+    };
+  } catch (err) {
+    console.error("getGuestHomepageData error:", err);
+    throw err;
+  }
 }

@@ -40,7 +40,7 @@ import { ref, watch } from 'vue'
 import { toast } from 'vue-sonner';
 import { useRouter } from 'vue-router'
 import AuthInput from '@/shared/AuthInput.vue';
-import AuthButton from '@/shared/AuthButton.vue';
+import AuthButton from '@/shared/buttons/AuthButton.vue';
 import { register } from '../authApi'
 import GoogleIcon from '@/shared/icons/GoogleIcon.vue'
 
