@@ -32,6 +32,12 @@
       </BaseButton>
     </div>
 
+    <div class="edit-button-wrapper" v-else>
+      <BaseButton @click="handleContact" class="contact-btn">
+        Contact
+      </BaseButton>
+    </div>
+
     <div class="profile-postfield-wrapper">
       <PostField v-if="isOwnProfile" @submit="addPost" />
     </div>
@@ -97,6 +103,13 @@ const fetchProfile = async () => {
     toast.error('Error loading posts.');
   }
 };
+
+function handleContact() {
+  if (!userStore.token) {
+    return router.push('/login');
+  }
+  toast.success('Contact button clicked');
+}
 
 watch(() => route.params.id, fetchProfile);
 

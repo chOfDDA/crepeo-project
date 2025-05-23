@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const AppError = require('../../utils/AppError');
 
-// REGISTER
 async function registerUser({ username, email, password }) {
   const existingEmail = await User.findOne({ email });
   if (existingEmail) {
@@ -25,8 +24,6 @@ async function registerUser({ username, email, password }) {
   };
 }
 
-
-// LOGIN
 async function loginUser({ email, password }) {
   const user = await User.findOne({ email }).select('+password');
   if (!user) {

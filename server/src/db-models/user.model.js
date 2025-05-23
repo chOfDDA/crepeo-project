@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Метод для перевірки пароля
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

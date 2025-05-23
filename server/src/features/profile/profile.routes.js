@@ -2,13 +2,11 @@ const router = require("express").Router();
 const auth = require("../../middlewares/authMiddleware");
 const Profile = require("../../db-models/profile.model");
 
-// Отримати профіль поточного користувача
 router.get("/", auth, async (req, res) => {
   const profile = await Profile.findOne({ user: req.user.id });
   res.json({ profile });
 });
 
-// Отримати профіль за ID користувача
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   const profile = await Profile.findOne({ user: userId }).populate(
@@ -26,7 +24,6 @@ router.get("/:userId", async (req, res) => {
   });
 });
 
-// Створити або оновити профіль поточного користувача
 router.post("/", auth, async (req, res) => {
   try {
     const { bio, role, professions, offerType, photoUrl } = req.body;

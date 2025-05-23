@@ -3,7 +3,6 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 const User = require("../../db-models/user.model");
 const { getMe } = require("./user.controller");
 
-// Повертає поточного користувача з токена
 router.get("/me", authMiddleware, getMe);
 
 router.get("/:id", async (req, res) => {

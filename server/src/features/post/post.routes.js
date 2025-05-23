@@ -3,7 +3,6 @@ const Post = require("../../db-models/post.model.js");
 const auth = require("../../middlewares/authMiddleware.js");
 const router = express.Router();
 
-// Отримати всі пости (головна сторінка)
 router.get("/", async (req, res, next) => {
   try {
     const posts = await Post.find()
@@ -15,7 +14,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Отримати пости певного користувача (профіль)
 router.get("/user/:userId", async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -40,7 +38,6 @@ router.get("/user/:id", async (req, res) => {
   }
 });
 
-// Створити новий пост
 router.post("/", auth, async (req, res, next) => {
   try {
     const { content, imageUrl } = req.body;
@@ -59,7 +56,6 @@ router.post("/", auth, async (req, res, next) => {
   }
 });
 
-// Видалити пост
 router.delete("/:id", auth, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -68,7 +64,6 @@ router.delete("/:id", auth, async (req, res, next) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    // Перевірка, чи користувач є автором поста
     if (post.author.toString() !== req.user.id) {
       return res
         .status(403)

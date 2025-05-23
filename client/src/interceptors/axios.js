@@ -17,7 +17,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Випадок: сервер не відповів (мережа, CORS, таймаут)
     if (!error.response) {
       toast.error("Network error. Please check your internet connection.");
       return Promise.reject(error);

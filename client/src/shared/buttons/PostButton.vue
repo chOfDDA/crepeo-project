@@ -17,7 +17,7 @@ function openWindow() {
 </script>
 
 <style lang="scss" scoped>
-@use './_variables' as *;
+@use '../_variables' as *;
 
 .post-button {
   position: fixed;
