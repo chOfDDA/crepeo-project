@@ -1,7 +1,6 @@
 @use 'sass:color';
 @use '../../shared/_variables' as *;
 
-// Layout and base styles
 .auth-container {
   display: flex;
   min-height: 100vh;
@@ -129,7 +128,6 @@
   }
 }
 
-// Responsive styles
 @media (max-width: 768px) {
   .auth-container {
     flex-direction: column;

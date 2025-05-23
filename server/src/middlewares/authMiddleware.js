@@ -13,7 +13,6 @@ module.exports = async function (req, res, next) {
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Догружаем весь объект пользователя (без пароля)
     const user = await User.findById(id).select("-password");
     if (!user) {
       return res

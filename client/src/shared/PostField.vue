@@ -22,7 +22,7 @@ import BaseButton from '@/shared/buttons/BaseButton.vue';
 import PostWindow from '@/shared/PostWindow.vue';
 
 const props = defineProps({
-  disabled: Boolean // <- додаємо підтримку пропсу
+  disabled: Boolean
 });
 
 const emit = defineEmits(['submit']);
@@ -32,7 +32,6 @@ const isPostWindowOpen = ref(false);
 const router = useRouter();
 const userStore = useUserStore();
 
-// Не завантажувати аватар, якщо користувач неавторизований
 onMounted(async () => {
   if (!props.disabled && userStore.token) {
     try {

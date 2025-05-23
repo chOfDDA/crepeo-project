@@ -17,20 +17,16 @@ const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
 
-// Підключення до бази даних
 connectDB();
 
-// Загальні Middleware
-app.use(cors()); // Доступ ззовні
-app.use(helmet()); // Захист HTTP-заголовків
-app.use(morgan("dev")); // Логування
-app.use(express.json()); // Парсинг JSON
-app.use(express.urlencoded({ extended: true })); // Парсинг form-urlencoded
+app.use(cors());
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Форматування відповіді
 app.use(responseFormatter);
 
-// Роутинг
 app.use("/api/auth", authRoutes);
 app.use("/api/users", authMiddleware, userRoutes);
 app.use("/api/profile", profileRoutes);

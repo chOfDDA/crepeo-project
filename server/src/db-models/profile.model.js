@@ -8,15 +8,15 @@ const profileSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    photoUrl: { type: String }, // ❌ не required
+    photoUrl: { type: String },
     role: {
       type: String,
       enum: ["Professional", "Amateur", "Observer", "Client"],
-      required: true, // ✅ залишаємо, бо обов'язкове
+      required: true,
     },
-    professions: [{ type: String }], // масив професій
+    professions: [{ type: String }],
     offerType: { type: String },
-    bio: { type: String, required: false }, // 🔧 виправлено
+    bio: { type: String, required: false },
   },
   { timestamps: true }
 );

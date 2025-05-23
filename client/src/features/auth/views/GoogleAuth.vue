@@ -1,31 +1,9 @@
 <template>
   <div class="auth-container">
-    <div class="auth-left">
-      <img class="image-placeholder" src="/assets/auth-page-img.png" alt="img" />
-    </div>
-    <div class="auth-right">
-      <h1>Log in to your Crepeo account</h1>
-      <form @submit.prevent="onSubmit">
-        <label for="email">Email</label>
-        <AuthInput id="email" v-model="email" placeholder="Enter your email" type="email" required />
-
-        <label for="password">Password</label>
-        <AuthInput id="password" v-model="password" placeholder="Enter your password" type="password" required />
-
-        <AuthButton type="submit" class="primary-button">Log In</AuthButton>
-
-        <p class="secondary-text">New user?
-          <router-link to="/register">
-            <span>Sign Up</span>
-          </router-link>
-        </p>
-
-        <div class="google-container">
-          <router-link to="/google" class="google-button">
-            <GoogleIcon />
-          </router-link>
-        </div>
-      </form>
+    <div class="google-container">
+      <router-link to="/google" class="google-button">
+        <GoogleIcon />
+      </router-link>
     </div>
   </div>
 </template>

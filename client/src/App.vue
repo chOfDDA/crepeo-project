@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { Toaster } from 'vue-sonner';
 import Sidebar from '@/shared/Sidebar.vue';
-import PostButton from '@/shared/PostButton.vue';
+import PostButton from '@/shared/buttons/PostButton.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
